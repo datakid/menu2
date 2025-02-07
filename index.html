@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Menu</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --mica-background: rgba(28, 28, 35, 0.85);
+      --mica-layer: rgba(28, 28, 35, 0.75);
+      --text-primary: rgba(255, 255, 255, 0.98);
+      --text-secondary: rgba(255, 255, 255, 0.78);
+      --border-color: rgba(255, 255, 255, 0.15);
+      --shadow-color: rgba(0, 0, 0, 0.45);
+      --highlight: rgba(255, 255, 255, 0.08);
+      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      
+      --gradient-1: linear-gradient(135deg, #FF6B6B, #FFE66D);
+      --gradient-2: linear-gradient(135deg, #4ECDC4, #556270);
+      --gradient-3: linear-gradient(135deg, #A8E6CF, #FF8B94);
+      --accent-gradient: linear-gradient(135deg, #6b9fff, #42d7ff);
+      --title-gradient: linear-gradient(135deg, #82E9FF, #7C4DFF);
+      --glow-gradient: radial-gradient(circle at 50% 0%, rgba(124, 77, 255, 0.2), transparent 70%);
+    }
+
+    body[data-theme="light"] {
+      --mica-background: rgba(255, 255, 255, 0.85);
+      --mica-layer: rgba(255, 255, 255, 0.75);
+      --text-primary: rgba(0, 0, 0, 0.98);
+      --text-secondary: rgba(0, 0, 0, 0.75);
+      --border-color: rgba(0, 0, 0, 0.12);
+      --shadow-color: rgba(0, 0, 0, 0.15);
+      --highlight: rgba(0, 0, 0, 0.05);
+      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      --glow-gradient: radial-gradient(circle at 50% 0%, rgba(124, 77, 255, 0.1), transparent 70%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      color: var(--text-primary);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/1920/1080') center/cover;
+      filter: blur(100px) saturate(180%);
+      transform: scale(1.2);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      padding: 0.75rem;
+      border-radius: 20px;
+      background: var(--mica-background);
+      backdrop-filter: blur(40px);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      z-index: 100;
+      display: flex;
+      gap: 0.5rem;
+      box-shadow: var(--card-shadow);
+      transform: translateZ(0);
+    }
+
+    .theme-option {
+      padding: 0.75rem 1.2rem;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      user-select: none;
+    }
+
+    .theme-option i {
+      font-size: 1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .theme-option:hover i {
+      transform: rotate(15deg);
+    }
+
+    .theme-option.active {
+      background: var(--highlight);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transform: scale(1.05);
+    }
+
+    .menu-container {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      padding: 4rem;
+      background: var(--mica-background);
+      backdrop-filter: blur(40px) saturate(200%);
+      border-radius: 40px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow),
+                  0 0 80px rgba(124, 77, 255, 0.15);
+      z-index: 1;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      transform: translateZ(0);
+    }
+
+    .menu-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: var(--glow-gradient);
+      pointer-events: none;
+    }
+
+    .menu-title {
+      font-size: 4.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 4rem;
+      background: var(--title-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+      position: relative;
+      letter-spacing: -0.02em;
+    }
+
+    .menu-item {
+      position: relative;
+      margin-bottom: 2rem;
+      background: var(--mica-layer);
+      border: 1px solid var(--border-color);
+      border-radius: 28px;
+      overflow: hidden;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateZ(0);
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 2.5rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      position: relative;
+      z-index: 1;
+    }
+
+    .menu-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--highlight);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: -1;
+    }
+
+    .menu-item:hover .menu-link::before {
+      opacity: 1;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      margin-right: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px var(--shadow-color);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .icon-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(100%);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .menu-item:hover .icon-container::before {
+      transform: translateY(0);
+    }
+
+    .menu-link i {
+      font-size: 2rem;
+      color: white;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      z-index: 1;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .menu-text {
+      flex: 1;
+      transform: translateX(0);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .menu-title-small {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .menu-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0.9;
+    }
+
+    .menu-item:hover {
+      transform: translateX(10px) scale(1.02);
+      box-shadow: 0 12px 48px var(--shadow-color);
+    }
+
+    .menu-item:hover .icon-container {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .menu-item:hover .menu-text {
+      transform: translateX(10px);
+    }
+
+    .menu-item:hover .menu-title-small {
+      transform: translateX(5px);
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .menu-item:hover .menu-description {
+      transform: translateX(5px);
+      opacity: 1;
+    }
+
+    .shine-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.08),
+        transparent
+      );
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .menu-item:hover .shine-effect {
+      transform: translateX(100%);
+    }
+
+    @media (max-width: 768px) {
+      .menu-container {
+        width: 95%;
+        padding: 3rem 2rem;
+      }
+
+      .menu-title {
+        font-size: 3rem;
+      }
+
+      .theme-toggle {
+        top: 1rem;
+        right: 1rem;
+        padding: 0.6rem;
+      }
+
+      .theme-option {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+      }
+
+      .menu-link {
+        padding: 2rem;
+      }
+
+      .icon-container {
+        width: 60px;
+        height: 60px;
+        margin-right: 1.5rem;
+      }
+
+      .menu-title-small {
+        font-size: 1.4rem;
+      }
+
+      .menu-description {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="theme-toggle">
+    <div class="theme-option" data-theme="system">
+      <i class="fas fa-display"></i>
+      <span>System</span>
+    </div>
+    <div class="theme-option" data-theme="light">
+      <i class="fas fa-sun"></i>
+      <span>Light</span>
+    </div>
+    <div class="theme-option" data-theme="dark">
+      <i class="fas fa-moon"></i>
+      <span>Dark</span>
+    </div>
+  </div>
+
+  <div class="menu-container">
+    <h1 class="menu-title">LinkExpress</h1>
+    <div class="menu-item">
+      <div class="shine-effect"></div>
+      <a href="https://finalapp-nine.vercel.app/" class="menu-link" target="_blank" rel="noopener noreferrer">
+        <div class="icon-container" style="background: var(--gradient-1)">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title-small">New Adventure</div>
+          <div class="menu-description">Draft a new form</div>
+        </div>
+      </a>
+    </div>
+    <div class="menu-item">
+      <div class="shine-effect"></div>
+      <a href="https://dashboard2-iota.vercel.app/" class="menu-link" target="_blank" rel="noopener noreferrer">
+        <div class="icon-container" style="background: var(--gradient-2)">
+          <i class="fas fa-compass"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title-small">Continue Journey</div>
+          <div class="menu-description">Resume from where you left off</div>
+        </div>
+      </a>
+    </div>
+    <div class="menu-item">
+      <div class="shine-effect"></div>
+      <a href="#" class="menu-link" id="exitButton">
+        <div class="icon-container" style="background: var(--gradient-3)">
+          <i class="fas fa-power-off"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title-small">Graceful Exit</div>
+          <div class="menu-description">Save your progress and return later</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const themeOptions = document.querySelectorAll('.theme-option');
+    
+    function getSystemTheme() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyTheme(theme) {
+      const actualTheme = theme === 'system' ? getSystemTheme() : theme;
+      document.body.setAttribute('data-theme', actualTheme);
+      
+      themeOptions.forEach(option => {
+        option.classList.toggle('active', option.dataset.theme === theme);
+      });
+
+      localStorage.setItem('theme', theme);
+    }
+
+    // Set initial theme
+    const savedTheme = localStorage.getItem('theme') || 'system';
+    applyTheme(savedTheme);
+
+    // Theme toggle click handlers
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        gsap.to('body', {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            applyTheme(option.dataset.theme);
+            gsap.to('body', {
+              opacity: 1,
+              duration: 0.2,
+              ease: 'power2.inOut'
+            });
+          }
+        });
+      });
+    });
+
+    // Watch for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (localStorage.getItem('theme') === 'system') {
+        applyTheme('system');
+      }
+    });
+
+    // Menu item hover animations with GSAP
+    document.querySelectorAll('.menu-item').forEach(item => {
+      const icon = item.querySelector('.icon-container');
+      const title = item.querySelector('.menu-title-small');
+      const description = item.querySelector('.menu-description');
+      
+      let hoverTimeline = gsap.timeline({ paused: true });
+      
+      hoverTimeline
+        .to(item, {
+          x: 10,
+          scale: 1.02,
+          duration: 0.2,
+          ease: 'power2.out'
+        })
+        .to(icon, {
+          scale: 1.1,
+          rotate: 5,
+          duration: 0.2,
+          ease: 'back.out(1.7)'
+        }, 0)
+        .to([title, description], {
+          x: 5,
+          duration: 0.2,
+          ease: 'power2.out',
+          stagger: 0.05
+        }, 0);
+
+      item.addEventListener('mouseenter', () => {
+        hoverTimeline.play();
+      });
+
+      item.addEventListener('mouseleave', () => {
+        hoverTimeline.reverse();
+      });
+    });
+
+    // Floating animation for icons
+    document.querySelectorAll('.icon-container').forEach(icon => {
+      gsap.to(icon, {
+        y: -6,
+        duration: 2,
+        ease: 'power1.inOut',
+        yoyo: true,
+        repeat: -1
+      });
+    });
+
+    // Enhanced shine effect
+    document.querySelectorAll('.menu-item').forEach(item => {
+      const shine = item.querySelector('.shine-effect');
+      
+      function triggerShine() {
+        if (!item.matches(':hover')) {
+          gsap.set(shine, {
+            x: '-100%'
+          });
+          
+          gsap.to(shine, {
+            x: '100%',
+            duration: 1.2,
+            ease: 'power2.inOut'
+          });
+        }
+      }
+
+      // Initial delay before starting the shine effect
+      setTimeout(() => {
+        setInterval(triggerShine, 4000);
+      }, Math.random() * 2000);
+    });
+
+    // Exit button handler with force close
+    document.getElementById('exitButton').addEventListener('click', (e) => {
+      e.preventDefault();
+      gsap.to('.menu-container', {
+        scale: 0.95,
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          // Try to close using window.close()
+          window.close();
+          
+          // Fallback - try to close using location
+          if (window.location.href.includes('about:')) {
+            window.location.replace('about:blank');
+          }
+          
+          // Last resort - redirect to blank page
+          window.location.href = 'about:blank';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
