@@ -3,60 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>LinkExpress</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <title>LinkExpress - Windows 12 Concept</title>
+  <!-- GSAP for animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Font Awesome for icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <!-- Nunito font for modern UI -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-
+    /* Root variables for theming, luxurious styling and fluid typography */
     :root {
-      --mica-background: rgba(28, 28, 35, 0.90);
-      --mica-layer: rgba(28, 28, 35, 0.80);
-      --text-primary: rgba(255, 255, 255, 0.98);
-      --text-secondary: rgba(255, 255, 255, 0.85);
-      --border-color: rgba(255, 255, 255, 0.20);
-      --shadow-color: rgba(0, 0, 0, 0.50);
-      --highlight: rgba(255, 255, 255, 0.10);
-      --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.40);
-      
-      --gradient-1: linear-gradient(135deg, #FF6B6B, #FFE66D);
-      --gradient-2: linear-gradient(135deg, #4ECDC4, #556270);
-      --gradient-3: linear-gradient(135deg, #A8E6CF, #FF8B94);
-      --accent-gradient: linear-gradient(135deg, #6b9fff, #42d7ff);
-      --title-gradient: linear-gradient(135deg, #82E9FF, #7C4DFF);
-      --glow-gradient: radial-gradient(circle at 50% 0%, rgba(124, 77, 255, 0.3), transparent 70%);
+      --background-color: #0f0f0f;
+      --mica-background: rgba(20, 20, 20, 0.97);
+      --mica-layer: rgba(20, 20, 20, 0.90);
+      --text-primary: #f8f8f8;
+      --text-secondary: #d0d0d0;
+      --border-color: rgba(255, 255, 255, 0.10);
+      --shadow-color: rgba(0, 0, 0, 0.7);
+      --highlight: rgba(255, 255, 255, 0.07);
+      --card-shadow: 0 15px 60px rgba(0, 0, 0, 0.45);
+      --gradient-1: linear-gradient(135deg, #ff9a00, #e63e94);
+      --gradient-2: linear-gradient(135deg, #00d1ff, #007aff);
+      --gradient-3: linear-gradient(135deg, #8a2be2, #f12fbd);
+      --accent-gradient: linear-gradient(135deg, #42d7ff, #6b9fff);
+      --title-gradient: linear-gradient(135deg, #a0e9ff, #7d5cff);
+      --glow-gradient: radial-gradient(circle at top, rgba(124, 77, 255, 0.3), transparent 70%);
+      --menu-title-font: clamp(2.5rem, 5vw, 4rem);
+      --menu-item-padding: clamp(1.5rem, 2vw, 2rem);
     }
 
+    /* Light theme overrides */
     body[data-theme="light"] {
-      --mica-background: rgba(255, 255, 255, 0.90);
-      --mica-layer: rgba(255, 255, 255, 0.80);
-      --text-primary: rgba(0, 0, 0, 0.98);
-      --text-secondary: rgba(0, 0, 0, 0.85);
-      --border-color: rgba(0, 0, 0, 0.12);
-      --shadow-color: rgba(0, 0, 0, 0.25);
-      --highlight: rgba(0, 0, 0, 0.08);
-      --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-      --glow-gradient: radial-gradient(circle at 50% 0%, rgba(124, 77, 255, 0.15), transparent 70%);
+      --mica-background: rgba(255, 255, 255, 0.97);
+      --mica-layer: rgba(245, 245, 245, 0.90);
+      --text-primary: #222;
+      --text-secondary: #444;
+      --border-color: rgba(0, 0, 0, 0.10);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --highlight: rgba(0, 0, 0, 0.04);
+      --card-shadow: 0 15px 60px rgba(0, 0, 0, 0.20);
+      --glow-gradient: radial-gradient(circle at top, rgba(124, 77, 255, 0.15), transparent 70%);
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Nunito', sans-serif;
       will-change: transform, opacity;
     }
 
+    /* Adjust body styles to center the menu vertically and horizontally */
     body {
       min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
-      background: #000;
+      justify-content: center;
+      background: var(--background-color);
       color: var(--text-primary);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       overflow-x: hidden;
+      padding: 2vh 1vw;
     }
 
     .background {
@@ -66,48 +74,37 @@
       width: 100%;
       height: 100%;
       background: url('/api/placeholder/1920/1080') center/cover;
-      filter: blur(100px) saturate(180%);
-      transform: scale(1.2);
-      z-index: -2;
+      filter: blur(80px) saturate(150%);
+      transform: scale(1.1);
+      z-index: -3;
       transition: opacity 0.5s ease;
     }
 
-    /* Premium noise overlay for extra texture */
-    .noise {
-      position: fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
-      opacity: 0.1;
-      z-index: -1;
-      pointer-events: none;
-    }
-
+    /* Theme toggle styling */
     .theme-toggle {
       position: fixed;
-      top: 2rem;
-      right: 2rem;
-      padding: 0.75rem;
-      border-radius: 20px;
+      top: 1.5rem;
+      right: 1.5rem;
+      padding: 0.8rem;
+      border-radius: 25px;
       background: var(--mica-background);
-      backdrop-filter: blur(40px);
+      backdrop-filter: blur(25px);
       border: 1px solid var(--border-color);
       color: var(--text-primary);
       z-index: 10;
       display: flex;
-      gap: 0.5rem;
+      gap: 0.7rem;
       box-shadow: var(--card-shadow);
+      transition: background 0.3s ease;
     }
 
     .theme-option {
-      padding: 0.75rem 1.2rem;
-      border-radius: 14px;
+      padding: 0.7rem 1.2rem;
+      border-radius: 16px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 0.9rem;
-      font-weight: 500;
+      transition: transform 0.2s ease, background 0.2s ease;
+      font-size: 1rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -115,7 +112,7 @@
     }
 
     .theme-option i {
-      font-size: 1rem;
+      font-size: 1.1rem;
       transition: transform 0.2s ease;
     }
 
@@ -125,70 +122,80 @@
 
     .theme-option.active {
       background: var(--highlight);
-      box-shadow: 0 2px 8px var(--shadow-color);
+      box-shadow: 0 3px 10px var(--shadow-color);
       transform: scale(1.05);
     }
 
+    /* Premium stylish container with each menu item in its own row */
     .menu-container {
-      position: relative;
-      width: 90%;
-      max-width: 800px;
-      padding: 4rem;
+      width: 100%;
+      max-width: 900px;
       background: var(--mica-background);
-      backdrop-filter: blur(40px) saturate(200%);
+      backdrop-filter: blur(20px) saturate(140%);
       border-radius: 40px;
       border: 1px solid var(--border-color);
-      box-shadow: var(--card-shadow), 0 0 100px rgba(124, 77, 255, 0.2);
+      box-shadow: var(--card-shadow);
       z-index: 5;
       transition: transform 0.25s ease, opacity 0.25s ease;
       overflow: hidden;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: relative;
     }
 
     .menu-container::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 200px;
+      top: -30px;
+      left: -30px;
+      width: calc(100% + 60px);
+      height: 250px;
       background: var(--glow-gradient);
       pointer-events: none;
       z-index: -1;
+      border-radius: 50%;
+      opacity: 0.8;
     }
 
     .menu-title {
-      font-size: 4.5rem;
+      font-size: var(--menu-title-font);
       font-weight: 700;
       text-align: center;
-      margin-bottom: 4rem;
+      margin-bottom: 1rem;
       background: var(--title-gradient);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-      position: relative;
+      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.4));
       letter-spacing: -0.02em;
       transition: opacity 0.25s ease;
     }
 
     .menu-item {
-      position: relative;
-      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
       background: var(--mica-layer);
       border: 1px solid var(--border-color);
       border-radius: 28px;
       overflow: hidden;
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      padding: var(--menu-item-padding);
+    }
+
+    .menu-item:not(:last-child) {
+      margin-bottom: 1rem;
     }
 
     .menu-link {
       display: flex;
       align-items: center;
-      padding: 2.5rem;
       text-decoration: none;
       color: var(--text-primary);
       position: relative;
-      z-index: 1;
+      width: 100%;
     }
 
     .menu-link::before {
@@ -212,12 +219,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 80px;
-      height: 80px;
-      margin-right: 2.5rem;
+      width: 90px;
+      height: 90px;
+      margin-right: 1.5rem;
       border-radius: 20px;
-      box-shadow: 0 10px 40px var(--shadow-color);
-      transition: transform 0.25s cubic-bezier(0.34, 1.8, 0.64, 1);
+      box-shadow: 0 15px 50px var(--shadow-color);
+      transition: transform 0.25s ease;
       position: relative;
       overflow: hidden;
     }
@@ -229,9 +236,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.12);
       transform: translateY(100%);
-      transition: transform 0.25s cubic-bezier(0.34, 1.8, 0.64, 1);
+      transition: transform 0.25s ease;
     }
 
     .menu-item:hover .icon-container::before {
@@ -239,40 +246,40 @@
     }
 
     .menu-link i {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       color: white;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
       z-index: 1;
-      transition: transform 0.25s cubic-bezier(0.34, 1.8, 0.64, 1);
+      transition: transform 0.25s ease;
     }
 
     .menu-text {
       flex: 1;
-      transition: transform 0.25s cubic-bezier(0.34, 1.8, 0.64, 1);
+      transition: transform 0.25s ease;
     }
 
     .menu-title-small {
       font-size: 1.8rem;
       font-weight: 600;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
       background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      transition: transform 0.25s cubic-bezier(0.34, 1.8, 0.64, 1), background 0.25s ease;
+      transition: transform 0.25s ease, background 0.25s ease;
     }
 
     .menu-description {
       font-size: 1.2rem;
       color: var(--text-secondary);
       font-weight: 400;
-      transition: transform 0.25s cubic-bezier(0.34, 1.8, 0.64, 1), opacity 0.25s ease;
+      transition: transform 0.25s ease, opacity 0.25s ease;
       opacity: 0.95;
     }
 
     .menu-item:hover {
       transform: translateX(12px) scale(1.03);
-      box-shadow: 0 12px 48px var(--shadow-color);
+      box-shadow: 0 15px 60px var(--shadow-color);
     }
 
     .menu-item:hover .icon-container {
@@ -310,30 +317,25 @@
       transform: translateX(100%);
     }
 
+    /* Responsive adjustments for mobile devices */
     @media (max-width: 768px) {
-      .menu-container {
-        width: 95%;
-        padding: 3rem 2rem;
-      }
-      .menu-title {
-        font-size: 3.5rem;
-      }
       .theme-toggle {
         top: 1rem;
         right: 1rem;
-        padding: 0.6rem;
+        padding: 0.7rem;
       }
       .theme-option {
         padding: 0.6rem 1rem;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
       }
-      .menu-link {
-        padding: 2rem;
+      .menu-item {
+        flex-direction: row;
+        padding: 1.5rem;
       }
       .icon-container {
         width: 70px;
         height: 70px;
-        margin-right: 1.5rem;
+        margin-right: 1rem;
       }
       .menu-title-small {
         font-size: 1.6rem;
@@ -341,23 +343,25 @@
       .menu-description {
         font-size: 1rem;
       }
+      .menu-container {
+        padding: 2rem 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="background"></div>
-  <div class="noise"></div>
+  <div class="background" aria-hidden="true"></div>
 
   <div class="theme-toggle">
-    <div class="theme-option" data-theme="system">
+    <div class="theme-option" data-theme="system" aria-label="System Theme">
       <i class="fas fa-desktop"></i>
       <span>System</span>
     </div>
-    <div class="theme-option" data-theme="light">
+    <div class="theme-option" data-theme="light" aria-label="Light Theme">
       <i class="fas fa-sun"></i>
       <span>Light</span>
     </div>
-    <div class="theme-option" data-theme="dark">
+    <div class="theme-option" data-theme="dark" aria-label="Dark Theme">
       <i class="fas fa-moon"></i>
       <span>Dark</span>
     </div>
@@ -369,11 +373,11 @@
       <div class="shine-effect"></div>
       <a href="https://finalapp-nine.vercel.app/" class="menu-link" target="_blank" rel="noopener noreferrer">
         <div class="icon-container" style="background: var(--gradient-1)">
-          <i class="fas fa-star"></i>
+          <i class="fas fa-star" aria-hidden="true"></i>
         </div>
         <div class="menu-text">
           <div class="menu-title-small">New Adventure</div>
-          <div class="menu-description">Draft a new form</div>
+          <div class="menu-description">Draft a new journey</div>
         </div>
       </a>
     </div>
@@ -381,7 +385,7 @@
       <div class="shine-effect"></div>
       <a href="https://dashboard2-iota.vercel.app/" class="menu-link" target="_blank" rel="noopener noreferrer">
         <div class="icon-container" style="background: var(--gradient-2)">
-          <i class="fas fa-compass"></i>
+          <i class="fas fa-compass" aria-hidden="true"></i>
         </div>
         <div class="menu-text">
           <div class="menu-title-small">Continue Journey</div>
@@ -391,13 +395,13 @@
     </div>
     <div class="menu-item">
       <div class="shine-effect"></div>
-      <a href="#" class="menu-link" id="exitButton">
+      <a href="#" class="menu-link" id="exitButton" aria-label="Close Session">
         <div class="icon-container" style="background: var(--gradient-3)">
-          <i class="fas fa-power-off"></i>
+          <i class="fas fa-power-off" aria-hidden="true"></i>
         </div>
         <div class="menu-text">
           <div class="menu-title-small">Close Session</div>
-          <div class="menu-description">exit and return later</div>
+          <div class="menu-description">Exit and return later</div>
         </div>
       </a>
     </div>
@@ -413,14 +417,13 @@
     function applyTheme(theme) {
       const actualTheme = theme === 'system' ? getSystemTheme() : theme;
       document.body.setAttribute('data-theme', actualTheme);
-      
       themeOptions.forEach(option => {
         option.classList.toggle('active', option.dataset.theme === theme);
       });
       localStorage.setItem('theme', theme);
     }
 
-    // Set initial theme
+    // Initialize theme from local storage or default to system
     const savedTheme = localStorage.getItem('theme') || 'system';
     applyTheme(savedTheme);
 
@@ -448,12 +451,13 @@
       }
     });
 
+    // Hover animations for menu items
     document.querySelectorAll('.menu-item').forEach(item => {
       const icon = item.querySelector('.icon-container');
       const title = item.querySelector('.menu-title-small');
       const description = item.querySelector('.menu-description');
       
-      let hoverTimeline = gsap.timeline({ paused: true });
+      const hoverTimeline = gsap.timeline({ paused: true });
       hoverTimeline
         .to(item, { x: 12, scale: 1.03, duration: 0.25, ease: 'power2.out' })
         .to(icon, { scale: 1.12, rotate: 5, duration: 0.25, ease: 'back.out(1.7)' }, 0)
@@ -468,6 +472,7 @@
       item.addEventListener('mouseleave', () => hoverTimeline.reverse());
     });
 
+    // Continuous subtle animation on icons for a dynamic feel
     document.querySelectorAll('.icon-container').forEach(icon => {
       gsap.to(icon, {
         y: -8,
@@ -478,7 +483,7 @@
       });
     });
 
-    // Use a continuous shine effect for premium feel
+    // Periodic shine effect across menu items
     document.querySelectorAll('.menu-item').forEach(item => {
       const shine = item.querySelector('.shine-effect');
       function triggerShine() {
@@ -487,12 +492,10 @@
           gsap.to(shine, { x: '100%', duration: 0.8, ease: 'power2.inOut' });
         }
       }
-      setTimeout(() => {
-        setInterval(triggerShine, 4200);
-      }, Math.random() * 1500);
+      setTimeout(() => setInterval(triggerShine, 4200), Math.random() * 1500);
     });
 
-    // Polished exit button with graceful fade-out and redirection effects
+    // Exit button logic with fade-out animation
     document.getElementById('exitButton').addEventListener('click', (e) => {
       e.preventDefault();
       gsap.to('.menu-container', { 
