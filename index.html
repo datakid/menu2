@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,9 +10,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" />
   <style>
-/* Root variables for theming, luxurious styling and fluid typography */
 :root {
-  /* Enhanced color palette with richer tones */
   --background-color: #050505;
   --mica-background: rgba(15, 15, 15, 0.97);
   --mica-layer: rgba(18, 18, 18, 0.92);
@@ -22,7 +21,7 @@
   --highlight: rgba(255, 255, 255, 0.09);
   --card-shadow: 0 20px 80px rgba(0, 0, 0, 0.55);
   
-  /* More vivid and premium gradients */
+  /* Enhanced gradients for more premium look */
   --gradient-1: linear-gradient(135deg, #ffb700, #ff2e9d);
   --gradient-2: linear-gradient(135deg, #00e5ff, #0066ff);
   --gradient-3: linear-gradient(135deg, #9d00ff, #ff00c8);
@@ -30,11 +29,9 @@
   --title-gradient: linear-gradient(135deg, #c4f1ff, #9671ff);
   --glow-gradient: radial-gradient(circle at top, rgba(138, 83, 255, 0.35), transparent 75%);
   
-  /* Refined typography sizing */
   --menu-title-font: clamp(2.8rem, 5.5vw, 4.2rem);
   --menu-item-padding: clamp(1.6rem, 2.2vw, 2.2rem);
   
-  /* New premium variables */
   --blur-intensity: 30px;
   --transition-bezier: cubic-bezier(0.2, 0.8, 0.2, 1);
   --hover-scale: 1.04;
@@ -42,8 +39,8 @@
   --icon-glow: 0 0 20px rgba(255, 255, 255, 0.25);
 }
 
-/* Light theme overrides with premium adjustments */
 body[data-theme="light"] {
+  --background-color: #f7f7f7;
   --mica-background: rgba(252, 252, 252, 0.97);
   --mica-layer: rgba(248, 248, 248, 0.94);
   --text-primary: #111;
@@ -53,6 +50,10 @@ body[data-theme="light"] {
   --highlight: rgba(0, 0, 0, 0.03);
   --card-shadow: 0 15px 60px rgba(0, 0, 0, 0.15);
   --glow-gradient: radial-gradient(circle at top, rgba(138, 83, 255, 0.12), transparent 70%);
+  
+  /* Fix for title visibility in light mode */
+  --title-gradient: linear-gradient(135deg, #5840dd, #8671ff);
+  --accent-gradient: linear-gradient(135deg, #00b2ff, #4d6aff);
 }
 
 * {
@@ -63,7 +64,6 @@ body[data-theme="light"] {
   will-change: transform, opacity;
 }
 
-/* Enhanced body styles with subtle gradient background */
 body {
   min-height: 100vh;
   display: flex;
@@ -81,7 +81,6 @@ body {
   padding: 3vh 2vw;
 }
 
-/* Improved background with subtle animation */
 .background {
   position: fixed;
   top: 0;
@@ -101,7 +100,6 @@ body {
   100% { opacity: 0.9; filter: blur(90px) saturate(200%); }
 }
 
-/* Improved theme toggle with subtle glass effect */
 .theme-toggle {
   position: fixed;
   top: 1.8rem;
@@ -149,7 +147,6 @@ body {
   transform: scale(1.08);
 }
 
-/* Premium container with enhanced depth and glow effects */
 .menu-container {
   width: 100%;
   max-width: 950px;
@@ -157,7 +154,7 @@ body {
   backdrop-filter: blur(var(--blur-intensity)) saturate(160%);
   border-radius: var(--corner-radius);
   border: 1px solid var(--border-color);
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow), 0 0 120px rgba(138, 83, 255, 0.2);
   z-index: 5;
   transition: all 0.35s var(--transition-bezier);
   overflow: hidden;
@@ -168,7 +165,6 @@ body {
   position: relative;
 }
 
-/* Enhanced glow effect for the container */
 .menu-container::before {
   content: '';
   position: absolute;
@@ -189,7 +185,6 @@ body {
   100% { transform: translateY(30px) scale(1.05); }
 }
 
-/* Added subtle texture overlay */
 .menu-container::after {
   content: '';
   position: absolute;
@@ -203,7 +198,6 @@ body {
   pointer-events: none;
 }
 
-/* Enhanced title styling with text shadow and animation */
 .menu-title {
   font-size: var(--menu-title-font);
   font-weight: 800;
@@ -218,6 +212,30 @@ body {
   transition: all 0.3s var(--transition-bezier);
   animation: titleGlow 3s infinite alternate var(--transition-bezier);
   transform: translateZ(0);
+  position: relative;
+}
+
+/* Enhanced title glow effect */
+.menu-title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: var(--title-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: blur(12px);
+  opacity: 0.7;
+  animation: titlePulse 4s infinite alternate var(--transition-bezier);
+}
+
+@keyframes titlePulse {
+  0% { filter: blur(12px); opacity: 0.5; }
+  100% { filter: blur(8px); opacity: 0.8; }
 }
 
 @keyframes titleGlow {
@@ -225,7 +243,6 @@ body {
   100% { filter: drop-shadow(0 8px 25px rgba(124, 77, 255, 0.35)); }
 }
 
-/* Enhanced menu items with premium effects */
 .menu-item {
   display: flex;
   align-items: center;
@@ -237,6 +254,7 @@ body {
   position: relative;
   padding: var(--menu-item-padding);
   transform: translateZ(0);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .menu-item:not(:last-child) {
@@ -270,7 +288,6 @@ body {
   opacity: 1;
 }
 
-/* Enhanced icon container with premium glow effect */
 .icon-container {
   display: flex;
   align-items: center;
@@ -286,7 +303,15 @@ body {
   transform: translateZ(0);
 }
 
-/* Premium glass effect for icon container */
+/* New premium glass effect for icons */
+.icon-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(225deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05));
+  z-index: 1;
+}
+
 .icon-container::before {
   content: '';
   position: absolute;
@@ -303,12 +328,11 @@ body {
   transform: translateY(0);
 }
 
-/* Premium icon styling */
 .menu-link i {
   font-size: 3rem;
   color: white;
   filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
-  z-index: 1;
+  z-index: 2;
   transition: all 0.35s var(--transition-bezier);
 }
 
@@ -322,7 +346,6 @@ body {
   transition: all 0.35s var(--transition-bezier);
 }
 
-/* Enhanced typography for menu items */
 .menu-title-small {
   font-size: 1.9rem;
   font-weight: 700;
@@ -345,10 +368,11 @@ body {
   letter-spacing: 0.01em;
 }
 
-/* Enhanced hover effects */
+/* Enhanced hover effects for ultra-premium look */
 .menu-item:hover {
   transform: translateX(15px) scale(var(--hover-scale));
-  box-shadow: 0 20px 70px var(--shadow-color);
+  box-shadow: 0 20px 70px var(--shadow-color), 0 0 30px rgba(138, 83, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .menu-item:hover .icon-container {
@@ -373,7 +397,7 @@ body {
   opacity: 1;
 }
 
-/* Enhanced shine effect with better timing */
+/* Enhanced shine effect for premium look */
 .shine-effect {
   position: absolute;
   top: 0;
@@ -390,7 +414,6 @@ body {
   transform: translateX(150%);
 }
 
-/* Premium floating animation for menu items */
 @keyframes floatAnimation {
   0% { transform: translateY(0); }
   100% { transform: translateY(-5px); }
@@ -401,7 +424,18 @@ body {
   animation-delay: calc(var(--item-index, 0) * 0.2s);
 }
 
-/* Enhanced responsive adjustments */
+/* Premium frost effect for glass morphism */
+.frost-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+  z-index: 0;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .theme-toggle {
     top: 1.2rem;
@@ -432,7 +466,6 @@ body {
     border-radius: 18px;
   }
   
-  /* Adjusted typography for mobile */
   .menu-title {
     font-size: 2.6rem;
     margin-bottom: 1rem;
@@ -456,7 +489,6 @@ body {
   }
 }
 
-/* Dark mode & light mode transition */
 body, .theme-toggle, .menu-container, .menu-item, .icon-container {
   transition: background-color 0.5s var(--transition-bezier),
               box-shadow 0.5s var(--transition-bezier),
@@ -464,7 +496,6 @@ body, .theme-toggle, .menu-container, .menu-item, .icon-container {
               color 0.5s var(--transition-bezier);
 }
 
-/* Add subtle scroll animations */
 @media (prefers-reduced-motion: no-preference) {
   .menu-item {
     opacity: 0;
@@ -514,7 +545,7 @@ body, .theme-toggle, .menu-container, .menu-item, .icon-container {
   </div>
 
   <div class="menu-container">
-    <h1 class="menu-title">LinkExpress</h1>
+    <h1 class="menu-title" data-text="Linkexpress">LinkExpress</h1>
     <div class="menu-item">
       <div class="shine-effect"></div>
       <a href="https://finalapp-nine.vercel.app/" class="menu-link" target="_blank" rel="noopener noreferrer">
