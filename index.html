@@ -3,430 +3,416 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LX Menu2</title>
+<title>LX Portal</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
 <style>
 :root {
---bg-base: #050507;
---glass-bg: rgba(12, 12, 16, 0.4);
---glass-border: rgba(255, 255, 255, 0.03);
---glass-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
---item-bg: rgba(255, 255, 255, 0.03);
---item-hover: rgba(255, 255, 255, 0.07);
---item-border: rgba(255, 255, 255, 0.03);
---item-border-hover: rgba(255, 255, 255, 0.12);
---text-main: #ffffff;
---text-muted: #8a8a93;
---icon-glow: rgba(255, 255, 255, 0.25);
---orb-1: #4a00e0;
---orb-2: #ff007f;
---orb-3: #00d2ff;
---grad-1: linear-gradient(135deg, #ff416c, #ff4b2b);
---grad-2: linear-gradient(135deg, #00b4db, #0083b0);
---grad-3: linear-gradient(135deg, #8a2387, #e94057);
---ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --bg-0: #0c0c10;
+  --bg-1: #08080b;
+  --card-bg: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.08);
+  --text: #f4f3f1;
+  --text-dim: #8b899a;
+  --text-faint: #55536b;
+  --accent: #8f8bff;
+  --danger: #e2686a;
+  --spot: rgba(255,255,255,0.4);
+  --spot-blend: soft-light;
+  --bevel: linear-gradient(155deg, rgba(255,255,255,0.4), rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.14) 100%);
+  --blob-a: #6d5ce0;
+  --blob-b: #3fb0d4;
+  --blob-c: #d98bb0;
+  --blob-op: 0.22;
+  --ease: cubic-bezier(0.19,1,0.22,1);
 }
 
 body[data-theme="light"] {
---bg-base: #f4f4f7;
---glass-bg: rgba(255, 255, 255, 0.5);
---glass-border: rgba(0, 0, 0, 0.03);
---glass-shadow: 0 40px 80px rgba(0, 0, 0, 0.05);
---item-bg: rgba(0, 0, 0, 0.02);
---item-hover: rgba(0, 0, 0, 0.05);
---item-border: rgba(0, 0, 0, 0.02);
---item-border-hover: rgba(0, 0, 0, 0.08);
---text-main: #111111;
---text-muted: #666666;
---icon-glow: rgba(0, 0, 0, 0.15);
---orb-1: #c4bbff;
---orb-2: #ffbbd6;
---orb-3: #bbf0ff;
+  --bg-0: #ffffff;
+  --bg-1: #f6f5f2;
+  --card-bg: rgba(255,255,255,0.55);
+  --card-border: rgba(20,18,25,0.08);
+  --text: #16151a;
+  --text-dim: #68667a;
+  --text-faint: #aeacbb;
+  --accent: #5b4fd6;
+  --danger: #c4453f;
+  --spot: rgba(91,79,214,0.08);
+  --spot-blend: normal;
+  --bevel: linear-gradient(155deg, rgba(20,18,25,0.16), rgba(20,18,25,0.02) 45%, rgba(20,18,25,0.08) 100%);
+  --blob-a: #b7abf5;
+  --blob-b: #a6dde8;
+  --blob-c: #f2c3d6;
+  --blob-op: 0.4;
 }
 
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: 'Inter', sans-serif;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
 body {
-min-height: 100vh;
-display: flex;
-align-items: center;
-justify-content: center;
-background-color: var(--bg-base);
-color: var(--text-main);
-overflow: hidden;
-transition: background-color 1s var(--ease-smooth);
+  min-height: 100vh;
+  background: var(--bg-1);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.6s var(--ease), color 0.6s var(--ease);
+  overflow-x: hidden;
 }
 
-.noise-overlay {
-position: fixed;
-inset: 0;
-z-index: -1;
-opacity: 0.035;
-pointer-events: none;
-background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+.liquid-field {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  filter: blur(110px);
+  transition: opacity 0.6s var(--ease);
 }
 
-.ambient-canvas {
-position: fixed;
-inset: 0;
-z-index: -2;
-filter: blur(120px);
-opacity: 0.8;
+.blob { position: absolute; border-radius: 50%; opacity: var(--blob-op); }
+.blob-a { width: 46vw; height: 46vw; top: -14%; left: -10%; background: var(--blob-a); animation: drift-a 26s ease-in-out infinite; }
+.blob-b { width: 40vw; height: 40vw; bottom: -16%; right: -8%; background: var(--blob-b); animation: drift-b 30s ease-in-out infinite; }
+.blob-c { width: 32vw; height: 32vw; top: 30%; left: 62%; background: var(--blob-c); animation: drift-c 22s ease-in-out infinite; }
+
+@keyframes drift-a { 0%,100% { transform: translate(0,0); } 50% { transform: translate(5%,8%); } }
+@keyframes drift-b { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-6%,-5%); } }
+@keyframes drift-c { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-8%,6%); } }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.2rem 3rem 0;
+  visibility: hidden;
 }
 
-.orb {
-position: absolute;
-border-radius: 50%;
-animation: drift 20s infinite ease-in-out alternate;
+.wordmark {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-weight: 500;
 }
 
-.orb-1 { width: 50vw; height: 50vw; background: var(--orb-1); top: -10%; left: -10%; }
-.orb-2 { width: 40vw; height: 40vw; background: var(--orb-2); bottom: -10%; right: -10%; animation-delay: -5s; }
-.orb-3 { width: 45vw; height: 45vw; background: var(--orb-3); top: 30%; left: 40%; animation-delay: -10s; }
-
-@keyframes drift {
-0% { transform: translate(0, 0) scale(1); }
-50% { transform: translate(5%, 10%) scale(1.1); }
-100% { transform: translate(-5%, -5%) scale(0.95); }
-}
-
-.theme-toggle {
-position: fixed;
-top: 2rem;
-right: 2rem;
-display: flex;
-background: var(--glass-bg);
-backdrop-filter: blur(20px);
--webkit-backdrop-filter: blur(20px);
-border: 1px solid var(--glass-border);
-border-radius: 100px;
-padding: 5px;
-z-index: 10;
-box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+.theme-switch {
+  display: flex;
+  gap: 0.15rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 100px;
+  padding: 3px;
+  backdrop-filter: blur(12px);
 }
 
 .theme-btn {
-background: transparent;
-border: none;
-color: var(--text-muted);
-padding: 8px 16px;
-border-radius: 100px;
-cursor: pointer;
-font-size: 0.9rem;
-font-weight: 500;
-transition: all 0.4s var(--ease-smooth);
-display: flex;
-align-items: center;
-gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  width: 28px; height: 28px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 0.74rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.4s var(--ease);
 }
 
-.theme-btn.active {
-background: var(--text-main);
-color: var(--bg-base);
+.theme-btn.active { background: var(--text); color: var(--bg-1); }
+.theme-btn:hover:not(.active) { color: var(--text); }
+.theme-btn:focus-visible, .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 2rem;
 }
 
-.theme-btn i { font-size: 0.85rem; }
-
-.portal-container {
-position: relative;
-width: 100%;
-max-width: 720px;
-padding: 2rem;
-z-index: 1;
-}
-
-.glass-box {
-background: var(--glass-bg);
-backdrop-filter: blur(60px) saturate(180%);
--webkit-backdrop-filter: blur(60px) saturate(180%);
-border: 1px solid var(--glass-border);
-border-radius: 40px;
-padding: 3.5rem 3rem;
-box-shadow: var(--glass-shadow);
-position: relative;
-overflow: hidden;
-}
-
-.glass-box::before {
-content: "";
-position: absolute;
-inset: 0;
-opacity: 0.015;
-background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-pointer-events: none;
-}
-
-.header-section {
-text-align: center;
-margin-bottom: 3.5rem;
-}
-
-.eyebrow {
-font-size: 0.8rem;
-text-transform: uppercase;
-letter-spacing: 0.3em;
-color: var(--text-muted);
-margin-bottom: 1rem;
-font-weight: 600;
-display: block;
-}
+.wrap { width: 100%; max-width: 1080px; }
 
 .title {
-font-size: 3rem;
-font-weight: 300;
-letter-spacing: -0.04em;
-color: var(--text-main);
-line-height: 1.1;
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.75rem;
+  visibility: hidden;
 }
 
-.title strong {
-font-weight: 600;
+.title span { color: var(--text-faint); }
+
+.bento {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+  height: clamp(460px, 62vh, 620px);
 }
 
-.menu-grid {
-display: flex;
-flex-direction: column;
-gap: 1.25rem;
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  color: inherit;
+  padding: 2.4rem;
+  border-radius: 22px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px) saturate(140%);
+  overflow: hidden;
+  visibility: hidden;
+  transition: backdrop-filter 0.5s var(--ease), box-shadow 0.5s var(--ease), transform 0.5s var(--ease);
 }
 
-.menu-item {
-text-decoration: none;
-display: flex;
-align-items: center;
-padding: 1.25rem 1.5rem;
-border-radius: 24px;
-background: var(--item-bg);
-border: 1px solid var(--item-border);
-transition: all 0.5s var(--ease-smooth);
-position: relative;
+.card-draft { grid-column: 1; grid-row: 1 / span 2; }
+.card-workspace { grid-column: 2; grid-row: 1; }
+.card-exit { grid-column: 2; grid-row: 2; }
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--bevel);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.65;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
 }
 
-.menu-item:hover {
-background: var(--item-hover);
-border-color: var(--item-border-hover);
-transform: scale(1.02) translateY(-2px);
-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+.card:hover::after { opacity: 1; }
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle 240px at var(--mx,50%) var(--my,50%), var(--spot), transparent 72%);
+  mix-blend-mode: var(--spot-blend);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+  pointer-events: none;
 }
 
-.icon-wrapper {
-width: 64px;
-height: 64px;
-border-radius: 18px;
-display: flex;
-align-items: center;
-justify-content: center;
-margin-right: 1.5rem;
-font-size: 1.5rem;
-color: #ffffff;
-box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), 0 10px 20px rgba(0,0,0,0.2);
-position: relative;
-transition: all 0.5s var(--ease-smooth);
+.card:hover::before { opacity: 1; }
+
+.card:hover {
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  transform: translateY(-2px);
 }
 
-.icon-wrapper::after {
-content: '';
-position: absolute;
-inset: 0;
-border-radius: inherit;
-box-shadow: 0 0 0 transparent;
-transition: box-shadow 0.5s var(--ease-smooth);
-z-index: -1;
+body[data-theme="light"] .card:hover { box-shadow: 0 24px 48px rgba(20,18,25,0.1); }
+
+.watermark {
+  position: absolute;
+  right: -0.8rem;
+  bottom: -1.4rem;
+  font-size: 10rem;
+  color: var(--text);
+  opacity: 0.04;
+  transition: transform 0.7s var(--ease), opacity 0.5s var(--ease);
+  pointer-events: none;
 }
 
-.menu-item:hover .icon-wrapper {
-transform: scale(1.08) rotate(4deg);
+.card:hover .watermark { transform: translate(-8px,-8px); opacity: 0.075; }
+
+.card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+  z-index: 1;
 }
 
-.menu-item:hover .icon-wrapper::after {
-box-shadow: 0 15px 30px var(--icon-glow);
+.card:hover .card-tag { color: var(--text-dim); }
+
+.card-body { position: relative; z-index: 1; }
+
+.card-name {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text);
 }
 
-.text-content {
-flex: 1;
-transition: transform 0.5s var(--ease-smooth);
+.card-draft .card-name { font-size: 2.2rem; }
+.card-workspace .card-name, .card-exit .card-name { font-size: 1.25rem; }
+
+.card-caption {
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  max-width: 32ch;
+  line-height: 1.5;
 }
 
-.menu-item:hover .text-content {
-transform: translateX(8px);
+.card-draft .card-caption { font-size: 1rem; max-width: 26ch; }
+
+.card-arrow {
+  position: absolute;
+  bottom: 2rem;
+  right: 2.1rem;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.4s var(--ease);
+  z-index: 1;
 }
 
-.item-title {
-font-size: 1.25rem;
-font-weight: 500;
-color: var(--text-main);
-margin-bottom: 0.25rem;
-letter-spacing: -0.01em;
+.card:hover .card-arrow { opacity: 1; transform: translateX(0); color: var(--accent); }
+
+#exitCard:hover .card-arrow { color: var(--danger); }
+#exitCard:hover::after { background: linear-gradient(155deg, rgba(226,104,106,0.45), rgba(226,104,106,0.05) 45%, rgba(226,104,106,0.2) 100%); }
+
+.footer {
+  text-align: center;
+  padding: 1.6rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  visibility: hidden;
 }
 
-.item-desc {
-font-size: 0.95rem;
-color: var(--text-muted);
-font-weight: 400;
+@media (max-width: 720px) {
+  .bento { grid-template-columns: 1fr; grid-template-rows: none; height: auto; gap: 0.7rem; }
+  .card-draft, .card-workspace, .card-exit { grid-column: 1; grid-row: auto; }
+  .card-draft { min-height: 190px; }
+  .card-workspace, .card-exit { min-height: 140px; }
+  .card-draft .card-name { font-size: 1.7rem; }
+  .topbar { padding: 1.6rem 1.6rem 0; }
+  .stage { padding: 1.5rem 1.4rem; }
+  .watermark { font-size: 7rem; }
 }
 
-.arrow {
-color: var(--text-muted);
-font-size: 1.2rem;
-opacity: 0;
-transform: translateX(-15px);
-transition: all 0.5s var(--ease-smooth);
+@media (prefers-reduced-motion: reduce) {
+  .blob { animation: none; }
+  * { transition-duration: 0.01ms !important; }
 }
-
-.menu-item:hover .arrow {
-opacity: 1;
-transform: translateX(0);
-color: var(--text-main);
-}
-
-@media (max-width: 600px) {
-.portal-container { padding: 1rem; }
-.glass-box { padding: 2.5rem 1.5rem; border-radius: 32px; }
-.title { font-size: 2.4rem; }
-.theme-toggle { top: 1rem; right: 1rem; }
-.theme-btn span { display: none; }
-.theme-btn { padding: 10px; }
-.icon-wrapper { width: 54px; height: 54px; font-size: 1.2rem; margin-right: 1rem; }
-.menu-item { padding: 1rem; }
-}
-
-.gsap-init { visibility: hidden; }
 </style>
 </head>
-<body>
-<div class="ambient-canvas">
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
+<body data-theme="dark">
+<div class="liquid-field">
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
 </div>
-<div class="noise-overlay"></div>
-<div class="theme-toggle gsap-init">
-<button class="theme-btn" data-theme="system">
-<i class="fas fa-desktop"></i><span>Auto</span>
-</button>
-<button class="theme-btn" data-theme="light">
-<i class="fas fa-sun"></i><span>Light</span>
-</button>
-<button class="theme-btn active" data-theme="dark">
-<i class="fas fa-moon"></i><span>Dark</span>
-</button>
-</div>
-<div class="portal-container">
-<div class="glass-box gsap-box">
-<div class="header-section">
-<span class="eyebrow gsap-el">Linkexpress</span>
-<h1 class="title gsap-el">Portal <strong>Access</strong></h1>
-</div>
-<div class="menu-grid">
-<a href="https://finalapp-nine.vercel.app/" class="menu-item gsap-item" target="_blank">
-<div class="icon-wrapper" style="background: var(--grad-1);">
-<i class="fas fa-layer-group"></i>
-</div>
-<div class="text-content">
-<div class="item-title">Initialize Draft</div>
-<div class="item-desc">Launch a new integration canvas</div>
-</div>
-<i class="fas fa-arrow-right arrow"></i>
-</a>
-<a href="https://dashboard2-iota.vercel.app/" class="menu-item gsap-item" target="_blank">
-<div class="icon-wrapper" style="background: var(--grad-2);">
-<i class="fas fa-compass"></i>
-</div>
-<div class="text-content">
-<div class="item-title">Active Workspace</div>
-<div class="item-desc">Resume your current projects</div>
-</div>
-<i class="fas fa-arrow-right arrow"></i>
-</a>
-<a href="#" class="menu-item gsap-item" id="exitBtn">
-<div class="icon-wrapper" style="background: var(--grad-3);">
-<i class="fas fa-power-off"></i>
-</div>
-<div class="text-content">
-<div class="item-title">Terminate Session</div>
-<div class="item-desc">Securely disconnect environment</div>
-</div>
-</a>
-</div>
-</div>
-</div>
+
+<header class="topbar gsap-bar">
+  <span class="wordmark">Linkexpress</span>
+  <div class="theme-switch">
+    <button class="theme-btn" data-theme="system" aria-label="System theme"><i class="fas fa-circle-half-stroke"></i></button>
+    <button class="theme-btn" data-theme="light" aria-label="Light theme"><i class="fas fa-sun"></i></button>
+    <button class="theme-btn active" data-theme="dark" aria-label="Dark theme"><i class="fas fa-moon"></i></button>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="wrap">
+    <h1 class="title gsap-title"><span>Portal</span> Access</h1>
+
+    <div class="bento">
+      <a href="https://finalapp-nine.vercel.app/" class="card card-draft gsap-card" target="_blank">
+        <span class="card-tag"><i class="fas fa-layer-group"></i>CREATE</span>
+        <div class="card-body">
+          <div class="card-name">Initialize Draft</div>
+          <div class="card-caption">Launch a new integration canvas</div>
+        </div>
+        <i class="fas fa-layer-group watermark"></i>
+        <i class="fas fa-arrow-right card-arrow"></i>
+      </a>
+
+      <a href="https://dashboard2-iota.vercel.app/" class="card card-workspace gsap-card" target="_blank">
+        <span class="card-tag"><i class="fas fa-compass"></i>RESUME</span>
+        <div class="card-body">
+          <div class="card-name">Active Workspace</div>
+          <div class="card-caption">Resume your current projects</div>
+        </div>
+        <i class="fas fa-compass watermark"></i>
+        <i class="fas fa-arrow-right card-arrow"></i>
+      </a>
+
+      <a href="#" class="card card-exit gsap-card" id="exitCard">
+        <span class="card-tag"><i class="fas fa-power-off"></i>EXIT</span>
+        <div class="card-body">
+          <div class="card-name">Terminate Session</div>
+          <div class="card-caption">Securely disconnect environment</div>
+        </div>
+        <i class="fas fa-power-off watermark"></i>
+        <i class="fas fa-arrow-right card-arrow"></i>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer class="footer gsap-footer">Encrypted connection</footer>
+
 <script>
 const themeBtns = document.querySelectorAll('.theme-btn');
 
 function applyTheme(theme) {
-const activeTheme = theme === 'system'
-? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
-: theme;
+  const activeTheme = theme === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+    : theme;
 
-document.body.setAttribute('data-theme', activeTheme);
+  document.body.setAttribute('data-theme', activeTheme);
 
-themeBtns.forEach(btn => {
-btn.classList.toggle('active', btn.dataset.theme === theme);
-});
-localStorage.setItem('portal-state', theme);
+  themeBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === theme);
+  });
+  localStorage.setItem('portal-state', theme);
 }
 
 applyTheme(localStorage.getItem('portal-state') || 'dark');
 
 themeBtns.forEach(btn => {
-btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
+  btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
 });
 
 window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
-if (localStorage.getItem('portal-state') === 'system') applyTheme('system');
+  if (localStorage.getItem('portal-state') === 'system') applyTheme('system');
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-gsap.set(".gsap-init", { visibility: "visible" });
-gsap.set(".gsap-box", { visibility: "visible" });
-
-const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-
-tl.fromTo(".gsap-box",
-{ y: 50, opacity: 0, scale: 0.96, filter: "blur(20px)" },
-{ y: 0, opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.8 }
-)
-.fromTo(".gsap-el",
-{ y: 20, opacity: 0 },
-{ y: 0, opacity: 1, duration: 1.2, stagger: 0.1 },
-"-=1.4"
-)
-.fromTo(".gsap-item",
-{ y: 20, opacity: 0, scale: 0.98 },
-{ y: 0, opacity: 1, scale: 1, duration: 1.2, stagger: 0.1 },
-"-=1.1"
-)
-.fromTo(".theme-toggle",
-{ y: -20, opacity: 0 },
-{ y: 0, opacity: 1, duration: 1.2 },
-"-=1.2"
-);
-
-document.getElementById('exitBtn').addEventListener('click', (e) => {
-e.preventDefault();
-
-const exitTl = gsap.timeline({
-onComplete: () => {
-window.close();
-if (window.location.href.includes('about:')) window.location.replace('about:blank');
-window.location.href = 'about:blank';
-}
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+    card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+  });
 });
 
-exitTl.to(".gsap-item", { x: 20, opacity: 0, duration: 0.4, stagger: -0.05, ease: "power2.in" })
-.to(".gsap-el", { y: -20, opacity: 0, duration: 0.4, ease: "power2.in" }, "-=0.2")
-.to(".gsap-box", { scale: 0.95, opacity: 0, filter: "blur(20px)", duration: 0.6, ease: "expo.inOut" }, "-=0.2")
-.to(".theme-toggle", { y: -20, opacity: 0, duration: 0.4 }, "-=0.4")
-.to(".ambient-canvas", { opacity: 0, duration: 0.6 }, "-=0.4");
-});
+document.addEventListener('DOMContentLoaded', () => {
+  gsap.set(['.gsap-bar', '.gsap-title', '.gsap-card', '.gsap-footer'], { visibility: 'visible' });
+
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.fromTo('.gsap-bar', { y: -12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 })
+    .fromTo('.gsap-title', { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.45')
+    .fromTo('.gsap-card', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, stagger: 0.09 }, '-=0.45')
+    .fromTo('.gsap-footer', { opacity: 0 }, { opacity: 1, duration: 0.6 }, '-=0.2');
+
+  document.getElementById('exitCard').addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const exitTl = gsap.timeline({
+      onComplete: () => {
+        window.close();
+        if (window.location.href.includes('about:')) window.location.replace('about:blank');
+        window.location.href = 'about:blank';
+      }
+    });
+
+    exitTl.to('.gsap-card', { opacity: 0, y: -8, duration: 0.35, stagger: 0.05, ease: 'power2.in' })
+      .to('.gsap-title, .gsap-footer', { opacity: 0, duration: 0.3 }, '-=0.25')
+      .to('.gsap-bar', { opacity: 0, duration: 0.3 }, '-=0.3')
+      .to('.liquid-field', { opacity: 0, duration: 0.4 }, '-=0.3');
+  });
 });
 </script>
 </body>
