@@ -41,7 +41,7 @@ body[data-theme="light"] {
   --text-mute: #a8a6b5;
   --accent: #5a4fd4;
   --danger: #b8433f;
-  --spot: rgba(90,79,212,0.2);
+  --spot: rgba(255,255,255,0.7);
   --danger-spot: rgba(184,67,63,0.22);
   --blob-a: #b8aef5;
   --blob-b: #a8dce6;
@@ -120,19 +120,17 @@ body[data-theme="light"] .noise { opacity: 0.04; }
   z-index:0; pointer-events:none;
 }
 .row:hover .row-surface, .row:focus-visible .row-surface {
-  opacity:1; backdrop-filter: blur(26px) saturate(190%) brightness(1.08); -webkit-backdrop-filter: blur(26px) saturate(190%) brightness(1.08);
+  opacity:1; backdrop-filter: blur(26px) saturate(140%) brightness(1.06); -webkit-backdrop-filter: blur(26px) saturate(140%) brightness(1.06);
   border-color: var(--glass-edge);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.12) inset,
-    -1px 0 0 rgba(120,190,255,0.10) inset,
-    1px 0 0 rgba(255,130,180,0.08) inset,
+    0 1px 0 rgba(255,255,255,0.16) inset,
+    0 -1px 0 rgba(255,255,255,0.05) inset,
     0 18px 40px rgba(0,0,0,0.28);
 }
 body[data-theme="light"] .row:hover .row-surface, body[data-theme="light"] .row:focus-visible .row-surface{
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.7) inset,
-    -1px 0 0 rgba(90,110,220,0.12) inset,
-    1px 0 0 rgba(220,110,150,0.1) inset,
+    0 1px 0 rgba(255,255,255,0.75) inset,
+    0 -1px 0 rgba(20,18,30,0.04) inset,
     0 16px 36px rgba(20,18,30,0.1);
 }
 
@@ -164,8 +162,8 @@ body[data-theme="light"] .row-spot{ mix-blend-mode:normal; }
 .row-ripple {
   position:absolute; width:220px; height:220px; border-radius:50%;
   left: var(--mx,50%); top: var(--my,50%); transform: translate(-50%,-50%) scale(.15);
-  background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.05) 35%, transparent 70%);
-  opacity:0; pointer-events:none; z-index:1; mix-blend-mode: soft-light;
+  background: radial-gradient(circle, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.08) 35%, transparent 70%);
+  opacity:0; pointer-events:none; z-index:1; mix-blend-mode: screen;
 }
 body[data-theme="light"] .row-ripple{ background: radial-gradient(circle, rgba(90,79,212,0.16) 0%, rgba(90,79,212,0.04) 40%, transparent 70%); mix-blend-mode:normal; }
 .row-exit .row-ripple{ background: radial-gradient(circle, rgba(226,128,127,0.24) 0%, rgba(226,128,127,0.06) 40%, transparent 70%); }
@@ -225,11 +223,12 @@ body[data-theme="light"] .row-ripple{ background: radial-gradient(circle, rgba(9
 <body data-theme="dark">
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <filter id="liquid" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="3" result="noise">
-        <animate attributeName="baseFrequency" dur="9s" values="0.012 0.018;0.016 0.014;0.012 0.018" repeatCount="indefinite" />
+    <filter id="liquid" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.017" numOctaves="2" seed="7" result="noise">
+        <animate attributeName="baseFrequency" dur="11s" values="0.011 0.017;0.015 0.013;0.011 0.017" repeatCount="indefinite" />
       </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+      <feGaussianBlur in="noise" stdDeviation="3" result="softNoise" />
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="7" xChannelSelector="R" yChannelSelector="G" />
     </filter>
   </defs>
 </svg>
